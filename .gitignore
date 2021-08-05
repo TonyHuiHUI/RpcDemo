@@ -1,0 +1,9 @@
+**/target/
+*.log
+.idea
+*.iml
+/hello-api/src/main/java/
+/hello-api/src/main/resources/*.xml
+*/docker/*
+
+*.DS_Store

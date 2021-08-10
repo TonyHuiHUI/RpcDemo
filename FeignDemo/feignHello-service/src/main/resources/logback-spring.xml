@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration debug="false" scan="false">
+    <springProperty scop="context" name="spring.application.name" source="spring.application.name" defaultValue="logs"/>
+    <property name="log.path" value="logs"/>
+    <!-- Console log output -->
+    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <!--格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符-->
+            <pattern>%d{MM-dd HH:mm:ss SSS}  [%t] %p [%X{trackId}] - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- Log file debug output -->
+    <appender name="debug" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!-- 支持多JVM同时操作同一个日志文件 -->
+        <prudent>false</prudent>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${log.path}/detail-feignHello-service.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <encoder>
+             <pattern>%d{MM-dd HH:mm:ss SSS}  [%t] %p [%X{trackId}] - %msg%n</pattern>
+        </encoder>
+
+    </appender>
+
+    <!-- Log ferrorsrror output -->
+    <appender name="error" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${log.path}/error-feignHello-service.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <encoder>
+             <pattern>%d{MM-dd HH:mm:ss SSS}  [%t] %p [%X{trackId}] - %msg%n</pattern>
+        </encoder>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>ERROR</level>
+        </filter>
+    </appender>
+
+    <appender name="async-debug" class="ch.qos.logback.classic.AsyncAppender">
+        <discardingThreshold>0</discardingThreshold>
+        <queueSize>1024</queueSize>
+        <neverBlock>true</neverBlock>
+        <appender-ref ref="debug"/>
+    </appender>
+
+    <appender name="async-error" class="ch.qos.logback.classic.AsyncAppender">
+        <discardingThreshold>0</discardingThreshold>
+        <queueSize>256</queueSize>
+        <neverBlock>true</neverBlock>
+        <appender-ref ref="error"/>
+    </appender>
+
+    <!-- Level: FATAL 0  ERROR 3  WARN 4  INFO 6  DEBUG 7 -->
+    <root level="info">
+        <appender-ref ref="console"/>
+        <appender-ref ref="async-debug"/>
+        <appender-ref ref="async-error"/>
+    </root>
+</configuration>

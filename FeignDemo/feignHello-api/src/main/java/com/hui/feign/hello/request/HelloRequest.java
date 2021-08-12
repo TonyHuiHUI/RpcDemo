@@ -7,6 +7,10 @@ package com.hui.feign.hello.request;
 public class HelloRequest {
     public String name;
     public int age;
+
+    public HelloRequest() {
+    }
+
     public HelloRequest(String name, int age){
         this.name = name;
         this.age = age;

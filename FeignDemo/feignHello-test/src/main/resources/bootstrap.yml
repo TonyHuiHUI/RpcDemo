@@ -9,3 +9,5 @@ spring:
       discovery:
         enabled: true
         register: true
+  main:
+    allow-bean-definition-overriding: true

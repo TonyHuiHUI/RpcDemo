@@ -13,8 +13,11 @@ public class HelloResponse {
         this.hello = hello;
     }
 
+    public HelloResponse() {
+    }
+
     @Override
     public String toString() {
-        return hello + UUID.randomUUID().toString();
+        return hello +" "+ UUID.randomUUID().toString();
     }
 }
